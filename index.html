@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type='text/css'>
+.cont{margin:20px auto;width:650px;border:1px solid gray;padding:10px;}
+#output {
+    border: 1px solid rgb(128, 128, 128);
+    height: 300px;
+    overflow: auto;
+		margin-top:10px;
+}
+</style>
+<script>
+onload=function(){
+	var url=document.getElementById("url");
+	var output=document.getElementById("output");
+	url.onkeypress=function(e){
+		//enter key
+		if(e.keyCode==13){
+			//add the http:// if they forget
+			url.value=url.value.replace(/^(?!https?:\/\/)/i,"http://");
+			var ajax=new XMLHttpRequest();
+			ajax.open("GET","http://code.tagput.com/xss/xss.php?url="+encodeURIComponent(url.value),true);
+			ajax.onreadystatechange=function(e){
+				if(ajax.readyState==4){
+					if(ajax.status==200){
+						output.textContent=ajax.responseText;
+					}
+					else{
+						output.textContent="Error loading url";
+					}
+				}
+			}
+			output.textContent="Loading...";
+			ajax.send(null);
+		}
+	}
+}
+</script>
+</head>
+<body>
+<div class='cont'>
+	Type a url (including http(s)://) and press enter... <br/>
+	<input id='url' style='width:400px;'/>
+	<br/><br/>
+	Output will be displayed here...<br/>
+	<div id='output'>
+	</div>
+</div>
+	
+</body>
